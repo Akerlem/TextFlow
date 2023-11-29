@@ -3,7 +3,7 @@ function myScript(thisObj) {
       var myPanel = (thisObj instanceof Panel) ? thisObj : new Window("palette", "ExportImport", undefined, {resizable: true, closeButton: false});
   
       var res = "group{orientation:'column',\
-                 groupTwo: Group{orientation:'row',\
+                 groupOne: Group{orientation:'row',\
           mainButton: Button {text:'Craete'},\
         },\
           groupThree: Group{orientation:'row',\
@@ -15,7 +15,7 @@ function myScript(thisObj) {
   
       // Default / Functionality
       
-      myPanel.grp.groupTwo.mainButton.onClick = function () {
+      myPanel.grp.groupOne.mainButton.onClick = function () {
         mainFunction();
       };
   
@@ -57,12 +57,41 @@ function myScript(thisObj) {
             alert("Please select a composition with text layers.");
         }
     }
+
+    /*
+    cw= thisComp.width;
+n=effect("Number of text layers")("Slider");
+//n=thisComp.numLayers;
+
+switch(true){
+	
+	case (n==1):
+		lw1= thisLayer.sourceRectAtTime(10).width;
+		w= lw1;
+		(cw/2)-(w/2);
+		break;
+	
+	
+	case (n==2):
+		lw1= thisLayer.sourceRectAtTime(10).width;
+		lw2=(thisComp.layer(index+1).sourceRectAtTime(10).width);
+		lm2=(thisComp.layer(index+1).text.sourceText.style.fontSize)*50*.45/100;
+		w= lw1+lw2+lm2;
+		(cw/2)-(w/2);
+		break;
+	 default:
+		 
+	 value;
+}
+
+*/
     
 
 // Function to create a separated dimension for the text
 function separateTextDimensions(textLayer) {
         textLayer.property("Position").dimensionsSeparated = true;
-        // For subsequent selected text layers, add a sample expression to the position property
+        textLayer.property("ADBE Transform Group").property("ADBE Position_0").expression = '11111';
+     
     for (var i = 1; i < app.project.activeItem.selectedLayers.length; i++) {
         var currentLayer = app.project.activeItem.selectedLayers[i];
 
