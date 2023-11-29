@@ -3,11 +3,7 @@ function myScript(thisObj) {
       var myPanel = (thisObj instanceof Panel) ? thisObj : new Window("palette", "ExportImport", undefined, {resizable: true, closeButton: false});
   
       var res = "group{orientation:'column',\
-            groupOne: Group{orientation:'row',\
-            exportButton: Button{text:'Export Text'},\
-            exportOptions: Checkbox{text:'Current Composition Only', value:true},\
-          },\
-          groupTwo: Group{orientation:'row',\
+                 groupTwo: Group{orientation:'row',\
           mainButton: Button {text:'Craete'},\
         },\
           groupThree: Group{orientation:'row',\
@@ -18,10 +14,7 @@ function myScript(thisObj) {
       myPanel.grp = myPanel.add(res);
   
       // Default / Functionality
-      myPanel.grp.groupOne.exportButton.onClick = function () {
-        exportText(!myPanel.grp.groupOne.exportOptions.value); // Invert the checkbox value
-      };
-  
+      
       myPanel.grp.groupTwo.mainButton.onClick = function () {
         mainFunction();
       };
@@ -69,7 +62,18 @@ function myScript(thisObj) {
 // Function to create a separated dimension for the text
 function separateTextDimensions(textLayer) {
         textLayer.property("Position").dimensionsSeparated = true;
+        // For subsequent selected text layers, add a sample expression to the position property
+    for (var i = 1; i < app.project.activeItem.selectedLayers.length; i++) {
+        var currentLayer = app.project.activeItem.selectedLayers[i];
+
+        // Check if the layer is a text layer
+        if (currentLayer instanceof TextLayer) {
+            // Add a sample expression to the position property
+            currentLayer.property("Position").expression = 's = thisComp.layer(index-1);\rw = s.sourceRectAtTime().width;\rx = s.transform.position[0];\ry = s.transform.position[1];\rf = s.text.sourceText.style.fontSize;\rfinalmargin = f*.45*50/100;\r[x+w+finalmargin,y]';
+        }
+    }
 }
+
     
 
     var myScriptPal = myScript_buildUI(thisObj);
@@ -80,3 +84,18 @@ function separateTextDimensions(textLayer) {
   }
   
   myScript(this);
+
+
+
+
+
+  /*
+  s = thisComp.layer(index-1);
+w = s.sourceRectAtTime().width;
+x = s.transform.position[0];
+y = s.transform.position[1];
+f = s.text.sourceText.style.fontSize; 
+finalmargin = f*.45*50/100;
+[x+w+finalmargin,y]
+
+*/
