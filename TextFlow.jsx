@@ -1,35 +1,35 @@
 function myScript(thisObj) {
     function myScript_buildUI(thisObj) {
-      var myPanel = (thisObj instanceof Panel) ? thisObj : new Window("palette", "ExportImport", undefined, {resizable: true, closeButton: false});
+      var myPanel = (thisObj instanceof Panel) ? thisObj : new Window("palette", "TextFlow", undefined, {resizable: true, closeButton: true});
   
       var res = "group{orientation:'column',\
-                 groupOne: Group{orientation:'row',\
-          mainButton: Button {text:'Craete'},\
+                explText: StaticText{text:'Change expression preferences to Javascript.'},\
+                groupOne: Group{orientation:'row',\
+                mainButton: Button {text:'Create'},\
         },\
-          groupThree: Group{orientation:'row',\
-          closeButton: Button{text:'Close'},\
+                groupThree: Group{orientation:'row',\
+                closeButton: Button{text:'Close'},\
         },\
       }";
   
       myPanel.grp = myPanel.add(res);
-  
+        
       // Default / Functionality
       
       myPanel.grp.groupOne.mainButton.onClick = function () {
         mainFunction();
       };
-  
-      myPanel.grp.groupThree.closeButton.onClick = function () {
+        myPanel.grp.groupThree.closeButton.onClick = function () {
         myPanel.close();
       };
-  
-      myPanel.layout.layout(true);
+        myPanel.layout.layout(true);
       return myPanel;
     }
  
-    app.beginUndoGroup("Create");
+    
 
     function mainFunction() {
+        app.beginUndoGroup("Create TextFlow");
         // Check if any layers are selected
         if (app.project.activeItem && app.project.activeItem instanceof CompItem) {
             var selectedLayers = app.project.activeItem.selectedLayers;
@@ -42,6 +42,7 @@ function myScript(thisObj) {
                     if (selectedLayers[i] instanceof TextLayer) {
                         //setLeftAlignment(selectedLayers[i]);
                         firstTextLayer = selectedLayers[i];
+                        firstTextLayer.name = "*" + firstTextLayer.name;
                         break;
                     }
                 }
@@ -59,6 +60,7 @@ function myScript(thisObj) {
         } else {
             alert("Please select a composition with text layers.");
         }
+        app.endUndoGroup();
     }
  
     /*
@@ -148,14 +150,14 @@ function separateTextDimensions(textLayer) {
         }
     }
 }
-
-app.endUndoGroup();
+    
 
     var myScriptPal = myScript_buildUI(thisObj);
     if (myScriptPal != null && myScriptPal instanceof Window) {
       myScriptPal.center();
       myScriptPal.show();
     }
+    
   }
   
   myScript(this);
